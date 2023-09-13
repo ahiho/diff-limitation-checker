@@ -2858,6 +2858,11 @@ async function run() {
     }
     const changeCount = Number(change.substring(0, idx).replace(/ |\n/g, ""));
     const maxFile = Number(core.getInput("max-file"));
+    const token = core.getInput("token");
+    const octokit = github.getOctokit(token);
+
+    const [owner, repo] = core.getInput("repository").split("/");
+
     if (changeCount > maxFile) {
       const msg = `PR contains has more than ${maxFile} files changed, pls explain`;
       octokit.rest.issues.createComment({
