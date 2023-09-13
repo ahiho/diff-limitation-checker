@@ -1,13 +1,25 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: "Check diff change of PR"
+description: "PR should not too many files, if not it need to be explained why"
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  max-file:
+    description: "max number of files change"
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+    default: "10"
+  token:
+    description: "GITHUB_TOKEN or a repo scoped PAT."
+    required: true
+    default: ${{ github.token }}
+  repository:
+    description: "The full name of the repository in which to create or update a comment."
+    required: true
+    default: ${{ github.repository }}
+  issue-number:
+    description: "The number of the issue or pull request in which to create a comment."
+    required: true
+  target-branch:
+    description: The branch to compare against
+    required: true
+    default: main
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"

@@ -1,18 +1,48 @@
-const core = require('@actions/core');
-const wait = require('./wait');
-
+const core = require("@actions/core");
+const { exec } = require("child_process");
 
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    const targetBranch = core.getInput("target-branch");
+    const change = await new Promise((resolve, reject) => {
+      exec(
+        `git --no-pager diff --shortstat origin/${targetBranch}`,
+        (err, stdout, stderr) => {
+          if (!!err) {
+            reject(err);
+            return;
+          }
+          if (!!stderr) {
+            reject(stderr);
+            return;
+          }
+          resolve(stdout);
+        }
+      );
+    });
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
-
-    core.setOutput('time', new Date().toTimeString());
+    if (!change) {
+      return;
+    }
+    const idx = change.indexOf("files changed");
+    if (idx <= 0) {
+      return;
+    }
+    const changeCount = Number(change.substring(0, idx).replace(/ |\n/g, ""));
+    const maxFile = Number(core.getInput("max-file"));
+    if (changeCount > maxFile) {
+      const msg = `PR contains has more than ${maxFile} files changed, pls explain`;
+      octokit.rest.issues.createComment({
+        body: msg,
+        repo,
+        owner,
+        issue_number: Number(core.getInput("issue-number")),
+      });
+      core.setFailed(msg);
+    } else {
+      console.log("Done! PR seem fine");
+    }
   } catch (error) {
     core.setFailed(error.message);
   }

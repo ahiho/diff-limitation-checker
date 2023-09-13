@@ -1,7 +1,7 @@
 {
-  "name": "javascript-action",
+  "name": "diff-limitation-checker",
   "version": "1.0.0",
-  "description": "JavaScript Action Template",
+  "description": "PR should not too many files, if not it need to be explained why",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "git+https://github.com/ahiho/diff-limitation-checker.git"
   },
   "keywords": [
     "GitHub",
@@ -21,9 +21,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+    "url": "https://github.com/ahiho/diff-limitation-checker/issues"
   },
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/ahiho/diff-limitation-checker#readme",
   "dependencies": {
     "@actions/core": "^1.10.0"
   },
