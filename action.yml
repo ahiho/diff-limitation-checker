@@ -7,11 +7,9 @@ inputs:
     default: "10"
   token:
     description: "GITHUB_TOKEN or a repo scoped PAT."
-    required: true
     default: ${{ github.token }}
   repository:
     description: "The full name of the repository in which to create or update a comment."
-    required: true
     default: ${{ github.repository }}
   issue-number:
     description: "The number of the issue or pull request in which to create a comment."
