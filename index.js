@@ -1,5 +1,5 @@
 const core = require("@actions/core");
-const { context, GitHub, getOctokit } = require("@actions/github");
+const { context, getOctokit } = require("@actions/github");
 
 // most @actions toolkit packages have async methods
 async function run() {
@@ -7,10 +7,12 @@ async function run() {
     const base = context.payload.pull_request.base.sha;
     const head = context.payload.pull_request.head.sha;
 
-    const client = new GitHub(core.getInput("token", { required: true }));
+    const token = core.getInput("token");
+    const octokit = getOctokit(token);
+    // const client = new GitHub(core.getInput("token", { required: true }));
     // Use GitHub's compare two commits API.
     // https://developer.github.com/v3/repos/commits/#compare-two-commits
-    const response = await client.repos.compareCommits({
+    const response = await octokit.rest.repos.compareCommits({
       base,
       head,
       owner: context.repo.owner,
@@ -41,8 +43,6 @@ async function run() {
         changeCount += 1;
       }
     }
-    const token = core.getInput("token");
-    const octokit = getOctokit(token);
 
     const maxFile = Number(core.getInput("max-file"));
 
