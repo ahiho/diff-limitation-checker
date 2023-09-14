@@ -9823,7 +9823,7 @@ async function run() {
     const maxFile = Number(core.getInput("max-file"));
 
     if (changeCount > maxFile) {
-      const msg = `PR contains has more than ${maxFile} files changed, pls explain`;
+      const msg = `❌❌❌ PR contains has more than ${maxFile} files changed, pls explain ❗️❗️❗️`;
       octokit.rest.issues.createComment({
         body: msg,
         owner: context.repo.owner,
